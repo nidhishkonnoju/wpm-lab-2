@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer base {
+  html, body {
+    @apply bg-soft text-gray-900 antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900;
+  }
+  p, span, small, label, input, select, button, table, th, td {
+    @apply text-gray-700;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors shadow-soft;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-700;
+  }
+  .btn-outline {
+    @apply btn border border-gray-300 text-gray-700 hover:bg-gray-100;
+  }
+  .card {
+    @apply bg-surface rounded-lg shadow-card;
+  }
+  .card-header {
+    @apply flex items-center justify-between mb-4;
+  }
+  .badge {
+    @apply px-2 py-1 text-xs rounded bg-gray-100 text-gray-700;
+  }
+}
+
+.ngx-charts-tooltip-content {
+  background: #f0f0f0 !important;
+  color: black !important;
+  opacity: 1 !important;
+}
