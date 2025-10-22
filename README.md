@@ -1,4 +1,4 @@
-# MEAN Marketing Automation
+# MEAN Marketing Automation Dashboard
 
 This is a full-stack marketing automation tool built with the MEAN stack (MongoDB, Express.js, Angular, Node.js).
 
