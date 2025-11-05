@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://travel-agency-dashboard-fkxy.onrender.com/api';
+  private baseUrl = 'http://localhost:4000/api';
 
   constructor(private http: HttpClient) {}
 

@@ -104,8 +104,8 @@ import { FormsModule } from '@angular/forms';
       </ng-container>
     </ng-container>
     <div class="flex justify-end">
-      <button type="button" (click)="close.emit()" class="btn-outline mr-2">Save</button>
-      <button type="submit" class="btn-primary" [disabled]="!form.valid">Cancel</button>
+      <button type="button" (click)="close.emit()" class="btn-outline mr-2">Cancel</button>
+      <button type="submit" class="btn-primary" [disabled]="!form.valid">Save</button>
     </div>
   </form>
 </div>

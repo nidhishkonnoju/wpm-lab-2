@@ -11,6 +11,7 @@ import segmentsRouter from './routes/segments.js';
 import templatesRouter from './routes/templates.js';
 import campaignsRouter from './routes/campaigns.js';
 import dashboardRouter from './routes/dashboard.js';
+import authRouter from './routes/auth.js';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/segments', segmentsRouter);
 app.use('/api/templates', templatesRouter);
 app.use('/api/campaigns', campaignsRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/auth', authRouter);
 
 // Global error handler (minimal)
 // eslint-disable-next-line no-unused-vars

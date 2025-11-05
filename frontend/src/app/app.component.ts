@@ -11,66 +11,75 @@ import { ModalComponent } from './pages/modal.component';
 import { CustomerService, Customer } from './services/customer.service';
 import { CampaignService, Campaign } from './services/campaign.service';
 import { SegmentService, Segment } from './services/segment.service';
+import { AuthComponent } from './pages/auth/auth.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule, LucideAngularModule, DashboardComponent, CampaignsComponent, CustomersComponent, SegmentsComponent, ModalComponent],
-  providers: [CustomerService, CampaignService, SegmentService],
+  imports: [RouterModule, CommonModule, FormsModule, LucideAngularModule, DashboardComponent, CampaignsComponent, CustomersComponent, SegmentsComponent, ModalComponent, AuthComponent],
+  providers: [CustomerService, CampaignService, SegmentService, AuthService],
 
   template: `
-<div class="min-h-screen">
-  <header class="bg-gradient-to-r from-primary to-accent-600 text-white">
-    <div class="max-w-7xl mx-auto px-6 py-6">
-      <h1 class="text-3xl font-bold mb-1">Marketing Automation Platform</h1>
-      <p class="text-white/80">Personalized Travel Agency Marketing System</p>
+<div *ngIf="isAuthenticated">
+  <div class="min-h-screen">
+    <header class="bg-gradient-to-r from-primary to-accent-600 text-white">
+      <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold mb-1">Marketing Automation Platform</h1>
+          <p class="text-white/80">Personalized Travel Agency Marketing System</p>
+        </div>
+        <button (click)="logout()" class="btn-outline text-white">Logout</button>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-6">
+      <nav class="mb-6 card p-2 flex overflow-x-auto">
+        <button (click)="activeTab = 'dashboard'" [ngClass]="{'bg-primary text-white': activeTab === 'dashboard', 'text-gray-700 hover:bg-gray-100': activeTab !== 'dashboard'}" class="flex items-center px-4 py-2 rounded-lg transition-colors mr-2">
+          <lucide-icon name="bar-chart-2"></lucide-icon>
+          <span class="font-medium ml-2">Dashboard</span>
+        </button>
+        <button (click)="activeTab = 'campaigns'" [ngClass]="{'bg-primary text-white': activeTab === 'campaigns', 'text-gray-700 hover:bg-gray-100': activeTab !== 'campaigns'}" class="flex items-center px-4 py-2 rounded-lg transition-colors mr-2">
+          <lucide-icon name="mail"></lucide-icon>
+          <span class="font-medium ml-2">Campaigns</span>
+        </button>
+        <button (click)="activeTab = 'customers'" [ngClass]="{'bg-primary text-white': activeTab === 'customers', 'text-gray-700 hover:bg-gray-100': activeTab !== 'customers'}" class="flex items-center px-4 py-2 rounded-lg transition-colors mr-2">
+          <lucide-icon name="users"></lucide-icon>
+          <span class="font-medium ml-2">Customers</span>
+        </button>
+        <button (click)="activeTab = 'segments'" [ngClass]="{'bg-primary text-white': activeTab === 'segments', 'text-gray-700 hover:bg-gray-100': activeTab !== 'segments'}" class="flex items-center px-4 py-2 rounded-lg transition-colors">
+          <lucide-icon name="target"></lucide-icon>
+          <span class="font-medium ml-2">Segments</span>
+        </button>
+      </nav>
+
+      <div [ngSwitch]="activeTab">
+        <div *ngSwitchCase="'dashboard'">
+          <app-dashboard></app-dashboard>
+        </div>
+        <div *ngSwitchCase="'campaigns'">
+          <app-campaigns [campaigns]="campaigns" (create)="handleCreate($event)" (edit)="handleEdit('campaign', $event)" (delete)="handleDelete('campaign', $event)" (toggleStatus)="toggleCampaignStatus($event)"></app-campaigns>
+        </div>
+        <div *ngSwitchCase="'customers'">
+          <app-customers [customers]="customers" (create)="handleCreate($event)" (edit)="handleEdit('customer', $event)" (delete)="handleDelete('customer', $event)"></app-customers>
+        </div>
+        <div *ngSwitchCase="'segments'">
+          <app-segments [segments]="segments" (create)="handleCreate($event)" (edit)="handleEdit('segment', $event)" (delete)="handleDelete('segment', $event)"></app-segments>
+        </div>
+      </div>
+    </main>
+
+    <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <app-modal [modalType]="modalType" [editingItem]="editingItem" [segments]="segments" (save)="handleSave($event)" (close)="showModal = false"></app-modal>
     </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto p-6">
-    <nav class="mb-6 card p-2 flex overflow-x-auto">
-      <button (click)="activeTab = 'dashboard'" [ngClass]="{'bg-primary text-white': activeTab === 'dashboard', 'text-gray-700 hover:bg-gray-100': activeTab !== 'dashboard'}" class="flex items-center px-4 py-2 rounded-lg transition-colors mr-2">
-        <lucide-icon name="bar-chart-2"></lucide-icon>
-        <span class="font-medium ml-2">Dashboard</span>
-      </button>
-      <button (click)="activeTab = 'campaigns'" [ngClass]="{'bg-primary text-white': activeTab === 'campaigns', 'text-gray-700 hover:bg-gray-100': activeTab !== 'campaigns'}" class="flex items-center px-4 py-2 rounded-lg transition-colors mr-2">
-        <lucide-icon name="mail"></lucide-icon>
-        <span class="font-medium ml-2">Campaigns</span>
-      </button>
-      <button (click)="activeTab = 'customers'" [ngClass]="{'bg-primary text-white': activeTab === 'customers', 'text-gray-700 hover:bg-gray-100': activeTab !== 'customers'}" class="flex items-center px-4 py-2 rounded-lg transition-colors mr-2">
-        <lucide-icon name="users"></lucide-icon>
-        <span class="font-medium ml-2">Customers</span>
-      </button>
-      <button (click)="activeTab = 'segments'" [ngClass]="{'bg-primary text-white': activeTab === 'segments', 'text-gray-700 hover:bg-gray-100': activeTab !== 'segments'}" class="flex items-center px-4 py-2 rounded-lg transition-colors">
-        <lucide-icon name="target"></lucide-icon>
-        <span class="font-medium ml-2">Segments</span>
-      </button>
-    </nav>
-
-    <div [ngSwitch]="activeTab">
-      <div *ngSwitchCase="'dashboard'">
-        <app-dashboard></app-dashboard>
-      </div>
-      <div *ngSwitchCase="'campaigns'">
-        <app-campaigns [campaigns]="campaigns" (create)="handleCreate($event)" (edit)="handleEdit('campaign', $event)" (delete)="handleDelete('campaign', $event)" (toggleStatus)="toggleCampaignStatus($event)"></app-campaigns>
-      </div>
-      <div *ngSwitchCase="'customers'">
-        <app-customers [customers]="customers" (create)="handleCreate($event)" (edit)="handleEdit('customer', $event)" (delete)="handleDelete('customer', $event)"></app-customers>
-      </div>
-      <div *ngSwitchCase="'segments'">
-        <app-segments [segments]="segments" (create)="handleCreate($event)" (edit)="handleEdit('segment', $event)" (delete)="handleDelete('segment', $event)"></app-segments>
-      </div>
-    </div>
-  </main>
-
-  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <app-modal [modalType]="modalType" [editingItem]="editingItem" [segments]="segments" (save)="handleSave($event)" (close)="showModal = false"></app-modal>
   </div>
 </div>
+<app-auth *ngIf="!isAuthenticated" (authenticated)="onAuthenticated()"></app-auth>
 `,
   styles: []
 })
 export class AppComponent implements OnInit {
+  isAuthenticated = false;
   activeTab = 'dashboard';
   customers: Customer[] = [];
   campaigns: Campaign[] = [];
@@ -106,11 +115,25 @@ export class AppComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private campaignService: CampaignService,
-    private segmentService: SegmentService
+    private segmentService: SegmentService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    if (this.isAuthenticated) {
+      this.loadData();
+    }
+  }
+
+  onAuthenticated() {
+    this.isAuthenticated = true;
     this.loadData();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.isAuthenticated = false;
   }
 
   loadData() {
@@ -188,7 +211,7 @@ export class AppComponent implements OnInit {
         };
         this.campaignService.createCampaign(payload).subscribe(newCampaign => {
           const ensured = { sent: 0, opened: 0, clicked: 0, conversions: 0, roi: 0, ...newCampaign } as any;
-          this.campaigns.push(ensured);
+          this.campaigns = [...this.campaigns, ensured];
         });
       }
     } else if (this.modalType === 'segment') {
@@ -198,7 +221,7 @@ export class AppComponent implements OnInit {
         });
       } else {
         this.segmentService.createSegment(formData).subscribe(newSegment => {
-          this.segments.push(newSegment);
+          this.segments = [...this.segments, newSegment];
         });
       }
     } else if (this.modalType === 'customer') {
@@ -221,7 +244,7 @@ export class AppComponent implements OnInit {
         };
         this.customerService.createCustomer(payload).subscribe(newCustomer => {
           const ensured = { totalSpent: 0, engagementScore: 0, ...newCustomer } as any;
-          this.customers.push(ensured);
+          this.customers = [...this.customers, ensured];
         });
       }
     }
