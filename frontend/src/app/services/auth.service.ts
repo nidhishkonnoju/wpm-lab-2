@@ -17,14 +17,24 @@ export class AuthService {
 
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
-      tap(res => this.setToken(res.token)),
+      tap(res => {
+        console.log('Login response:', res);
+        if (res && res.token) {
+          this.setToken(res.token);
+        }
+      }),
       catchError(this.handleError)
     );
   }
 
   register(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, { username, password }).pipe(
-      tap(res => this.setToken(res.token)),
+      tap(res => {
+        console.log('Register response:', res);
+        if (res && res.token) {
+          this.setToken(res.token);
+        }
+      }),
       catchError(this.handleError)
     );
   }
