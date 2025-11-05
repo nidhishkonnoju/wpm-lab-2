@@ -22,7 +22,7 @@ This is a full-stack marketing automation tool built with the MEAN stack (MongoD
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/GEMINI-CLI-USER/mean-marketing-automation.git
+   git clone https://github.com/nidhishkonnoju/wpm-lab-2.git
    cd mean-marketing-automation
    ```
 
