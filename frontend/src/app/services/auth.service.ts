@@ -8,7 +8,7 @@ import { tap, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/api/auth';
+  private apiUrl = 'https://travel-agency-dashboard-fkxy.onrender.com/api/auth';
   private token: string | null = null;
 
   constructor(private http: HttpClient) {
