@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "webpack serve --config webpack.config.js --mode development",
-    "build": "npx webpack --config webpack.config.js --mode production"
+    "build": "./node_modules/.bin/webpack --config webpack.config.js --mode production"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
