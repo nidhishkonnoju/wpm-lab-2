@@ -22,7 +22,9 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.6.2",
-    "zone.js": "~0.14.0"
+    "zone.js": "~0.14.0",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
@@ -36,8 +38,6 @@
     "tailwindcss": "^3.4.3",
     "ts-loader": "^9.5.1",
     "typescript": "~5.4.0",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.2.2"
   }
 }
