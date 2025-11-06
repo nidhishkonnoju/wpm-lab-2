@@ -55,6 +55,7 @@ export class AuthService {
 
   private handleError(error: any): Observable<never> {
     console.error('Authentication error:', error);
-    return throwError(() => new Error(error.error.msg || 'Something went wrong'));
+    const errorMsg = error?.error?.error || error?.error?.msg || 'Something went wrong';
+    return throwError(() => new Error(errorMsg));
   }
 }
