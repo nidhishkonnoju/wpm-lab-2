@@ -23,6 +23,21 @@ router.post('/register', async (req, res) => {
       password
     });
 
+    await user.save();
+
+    const payload = {
+      user: {
+        id: user.id
+      }
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET || 'mysecrettoken',
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
       }
     );
   } catch (err) {
